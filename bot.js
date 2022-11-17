@@ -1,9 +1,13 @@
 //https://discordapp.com/oauth2/authorize?&client_id=1038218491339218965&scope=bot&permissions=76800
-var Discord = require('discord.io');
+require('dotenv').config();
 
-var logger = require('winston');
+const {Client, GatewayIntentBits} = require('discord.js');
 
-var auth = require('./auth.json');
+
+
+//var logger = require('winston');
+
+//var auth = require('./auth.json');
 
 var authorizedUsers = [];
 var targetSystems = [];
@@ -13,32 +17,36 @@ const newObjectiveKeywords = ["brief", "briefing", "New Orders", "Orders"];
 
 // Configure logger settings
 
-logger.remove(logger.transports.Console);
+/*logger.remove(logger.transports.Console);
 
 logger.add(new logger.transports.Console, {
 colorize: true});
 
-logger.level = 'debug';
+logger.level = 'debug';*/
 
 // Initialize Discord Bot
     
-var bot = new Discord.Client({
+var bot = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent, GatewayIntentBits.GuildPresences]}
     
-token: auth.token,
+//token: auth.token,
     
-autorun: true
+//autorun: true
     
-});
+);
+
+//bot.login(auth.token);
     
-bot.on('ready', function (evt) {
+bot.on('ready', () => {
     
-logger.info('Connected');
+console.log('Connected');
     
-logger.info('Logged in as: ');
+console.log('Logged in as: ');
     
-logger.info(bot.username + ' - (' + bot.id + ')');
+console.log(`${bot.user.tag}`);
 });
 
+//bot.login(process.env.TOKEN);
+/*
 // Helper to check if the message is updating the BGS objective
 function checkForNewObjectives(messagetext) {
     for (const phrase of newObjectiveKeywords) {
@@ -51,9 +59,21 @@ function checkForNewObjectives(messagetext) {
 // Updates the objectives
 function updateObjectives(messagetext) {
     var lines = messagetext.split('\n');
-}
+    for (const line of lines) {
 
-bot.on('message', function (user, userID, channelID, message, evt) {
+    }
+}
+*/
+
+
+bot.on('message', msg => {
+    console.log(msg.content);
+    if (msg.content === "ping") {
+      msg.reply("pong");
+    }
+});
+
+/*bot.on('message', function (user, userID, channelID, message, evt) {
 
     // Our bot needs to know if it will execute a command
     
@@ -63,16 +83,16 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     // Administration commands
 
     // Sets new goals
-    if (checkForNewObjectives(message)) {
-        updateObjectives(message);
-    }
+    //if (checkForNewObjectives(message)) {
+    //    updateObjectives(message);
+    //}
     
 
-    logger.info(message);
+    console.log(message);
 
 
 
-    /*if (message.substring(0, 1) == '!') {
+    if (message.substring(0, 1) == '!') {
         
     
         var args = message.substring(1).split(' ');
@@ -102,6 +122,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     
          }
     
-    }*/
-});
+    }
+});*/
 
+bot.login(process.env.TOKEN);
