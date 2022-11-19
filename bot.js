@@ -1,51 +1,57 @@
-//https://discordapp.com/oauth2/authorize?&client_id=1038218491339218965&scope=bot&permissions=76800
-require('dotenv').config();
+//  https://discordapp.com/oauth2/authorize?&client_id=1038218491339218965&scope=bot&permissions=76800
+const dotenv = require('dotenv');
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client, Events, Collection, GatewayIntentBits } = require('discord.js');
 
-const {Client, GatewayIntentBits} = require('discord.js');
+dotenv.config();
 
-
-
-//var logger = require('winston');
-
-//var auth = require('./auth.json');
-
-var authorizedUsers = [];
-var targetSystems = [];
-
-const newObjectiveKeywords = ["brief", "briefing", "New Orders", "Orders"];
-
-
-// Configure logger settings
-
-/*logger.remove(logger.transports.Console);
-
-logger.add(new logger.transports.Console, {
-colorize: true});
-
-logger.level = 'debug';*/
+let authorizedUsers = [];
+let targetSystems = [];
+const newObjectiveKeywords = ['brief', 'briefing', 'New Orders', 'Orders'];
 
 // Initialize Discord Bot
-    
-var bot = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent, GatewayIntentBits.GuildPresences]}
-    
-//token: auth.token,
-    
-//autorun: true
-    
-);
+let bot = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
-//bot.login(auth.token);
-    
-bot.on('ready', () => {
-    
-console.log('Connected');
-    
-console.log('Logged in as: ');
-    
-console.log(`${bot.user.tag}`);
+bot.commands = new Collection();
+
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
+
+    // Set new item in Collection with key as the command name and value as exported module
+    if ('data' in command && 'execute' in command) {
+        bot.commands.set(command.data.name, command);
+    } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`)
+    }
+}
+
+bot.on(Events.InteractionCreate, async interaction => {
+    if (!interaction.isChatInputCommand()) return;
+
+    // console.log(interaction);
+    const command = interaction.client.commands.get(interaction.commandName);
+
+    if (!command) {
+        console.error(`No command matching ${interaction.commandName} was found.`);
+        return;
+    }
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+    }
 });
 
-//bot.login(process.env.TOKEN);
+bot.once(Events.ClientReady, client => {
+    console.log(`Connected as: ${bot.user.tag}`);
+});
+
 /*
 // Helper to check if the message is updating the BGS objective
 function checkForNewObjectives(messagetext) {
@@ -64,65 +70,5 @@ function updateObjectives(messagetext) {
     }
 }
 */
-
-
-bot.on('message', msg => {
-    console.log(msg.content);
-    if (msg.content === "ping") {
-      msg.reply("pong");
-    }
-});
-
-/*bot.on('message', function (user, userID, channelID, message, evt) {
-
-    // Our bot needs to know if it will execute a command
-    
-    // It will listen for messages that will start with `!`
-    // 332846508888031232 - BGSBot userID
-
-    // Administration commands
-
-    // Sets new goals
-    //if (checkForNewObjectives(message)) {
-    //    updateObjectives(message);
-    //}
-    
-
-    console.log(message);
-
-
-
-    if (message.substring(0, 1) == '!') {
-        
-    
-        var args = message.substring(1).split(' ');
-    
-        var cmd = args[0];
-    
-    
-        args = args.splice(1);
-    
-        switch(cmd) {
-    
-            // !ping
-    
-            case 'ping':
-    
-                bot.sendMessage({
-    
-                    to: channelID,
-    
-                    message: 'Pong!'
-    
-                });
-    
-            break;
-    
-            // Just add any case commands if you want to..
-    
-         }
-    
-    }
-});*/
 
 bot.login(process.env.TOKEN);
