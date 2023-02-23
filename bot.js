@@ -6,10 +6,6 @@ const { Client, Events, Collection, GatewayIntentBits } = require('discord.js');
 
 dotenv.config();
 
-let authorizedUsers = [];
-let targetSystems = [];
-const newObjectiveKeywords = ['brief', 'briefing', 'New Orders', 'Orders'];
-
 // Initialize Discord Bot
 const bot = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 

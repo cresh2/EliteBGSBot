@@ -13,7 +13,7 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
         const targetSystem = interaction.options.getString('system');
-        console.log(getSystemSummary(targetSystem));
-        await interaction.editReply('Pong!');
+        const systemSummary = getSystemSummary(targetSystem);
+        await interaction.editReply(systemSummary);
     },
 };
