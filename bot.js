@@ -11,7 +11,7 @@ let targetSystems = [];
 const newObjectiveKeywords = ['brief', 'briefing', 'New Orders', 'Orders'];
 
 // Initialize Discord Bot
-let bot = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const bot = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 bot.commands = new Collection();
 
@@ -29,46 +29,17 @@ for (const file of commandFiles) {
     }
 }
 
-bot.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-    // console.log(interaction);
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    if (!command) {
-        console.error(`No command matching ${interaction.commandName} was found.`);
-        return;
-    }
-
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        console.error(error);
-        await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-    }
-});
-
-bot.once(Events.ClientReady, client => {
-    console.log(`Connected as: ${bot.user.tag}`);
-});
-
-/*
-// Helper to check if the message is updating the BGS objective
-function checkForNewObjectives(messagetext) {
-    for (const phrase of newObjectiveKeywords) {
-        if (messagetext.includes(phrase)) {
-            return true;
-        }
-    }
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		bot.once(event.name, (...args) => event.execute(...args));
+	} else {
+		bot.on(event.name, (...args) => event.execute(...args));
+	}
 }
-
-// Updates the objectives
-function updateObjectives(messagetext) {
-    var lines = messagetext.split('\n');
-    for (const line of lines) {
-
-    }
-}
-*/
 
 bot.login(process.env.TOKEN);
