@@ -1,5 +1,5 @@
 let global = {
-    actionType : new Map([
+    actionSimple : new Map([
         ['INF' , 0],
         ['Kills' , 1],
         ['Bounties' , 2],
@@ -7,7 +7,7 @@ let global = {
         ['Explo' , 4],
         ['Trade' , 5],
     ]),
-    actionSubtype : new Map([
+    actionComplex : new Map([
         ['INT' , 6],
         ['SCT' , 7], 
         ['Ground' , 8],
@@ -25,6 +25,7 @@ let global = {
         ['x?A' , 20],
     ]),
     bgsActionAmount : 22,
-    summary : new Map()
+    summary : new Map(),
+    erroredLogs : []
 };
 module.exports = { global };

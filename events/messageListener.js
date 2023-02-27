@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 let { global } = require('../global.js');
-const { getFullSummary, getSystemSummary, checkForReset } = require('../utils/parseUtils.js');
+const { getFullSummary, getSystemSummary, checkForReset, parseBGSLog } = require('../utils/parseUtils.js');
 
 module.exports = {
     name: Events.MessageCreate,
@@ -12,10 +12,13 @@ module.exports = {
                 message.channel.send(element);
             });
             global.summary.clear();
+            global.erroredLogs = [];
         } else if (message.content.includes(':clock2: `Date:`')) {
-
+            try {
+                parseBGSLog(message.content);
+            } catch (error) {
+                global.erroredLogs.push([message.id, error]);
+            }
         }
-        
-        //console.log(message.content);
     },
 };
