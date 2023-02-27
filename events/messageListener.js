@@ -5,16 +5,17 @@ const { getFullSummary, getSystemSummary, checkForReset } = require('../utils/pa
 module.exports = {
     name: Events.MessageCreate,
     execute(message) {
-        if (checkForReset) {
+        // Check if we are resetting or dealing with a log
+        if (checkForReset(message)) {
             const fullSummary = getFullSummary();
-            fullSummary.array.forEach(element => {
+            fullSummary.forEach(element => {
                 message.channel.send(element);
             });
             global.summary.clear();
-        } else if (false) {
+        } else if (message.content.includes(':clock2: `Date:`')) {
 
         }
         
-        console.log(message.content);
+        //console.log(message.content);
     },
 };

@@ -1,8 +1,8 @@
 let { global } = require('../global.js');
 
 exports.checkForReset = (message) => {
-    if (message.author == 332846508888031232 && message.embeds.length != 0) {
-        console.log("time to reset");
+    // Make sure the message is from BGSBot and is the tick notification
+    if (message.author.id == '332846508888031232' && message.embeds.length != 0) {
         return true;
     }
 
@@ -11,6 +11,7 @@ exports.checkForReset = (message) => {
 
 exports.getSystemSummary = (system) => { 
     const systemSummary = global.summary.get(system);
+    
     if (systemSummary === undefined) {
         return 'The system you entered does not have any logged work.';
     } else {
@@ -24,5 +25,9 @@ exports.getFullSummary = () => {
         return ['There has not been any work done since last tick.'];
     }
     return true;
+}
+
+exports.parseBGSLog = (log) => {
+    targets = log.split(':globe_with_meridians: `Target:`');
 }
 
