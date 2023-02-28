@@ -13,7 +13,7 @@ module.exports = {
             });
             global.summary.clear();
             global.erroredLogs = [];
-        } else if (message.content.includes(':clock2: `Date:`')) {
+        } else if (message.content.includes('\u{1F551} `Date:`')) {
             try {
                 parseBGSLog(message.content);
             } catch (error) {

@@ -28,12 +28,12 @@ exports.getFullSummary = () => {
 }
 
 exports.parseBGSLog = (log) => {
-    let targets = log.split(':globe_with_meridians: `Target:`');
+    let targets = log.split('\u{1F310} `Target:`');
     targets.shift();
 
     targets.forEach(target => {
         const description = target.split('\n', 2);
-        const systemAndFaction = description[0].trim.split(',');
+        const systemAndFaction = description[0].trim().split(',');
         let factionWork;
 
         // Check and see whether we need to create a system and/or faction entry
@@ -55,7 +55,7 @@ exports.parseBGSLog = (log) => {
             global.summary.set(systemAndFaction[0].trim(), system)
         }
 
-        const summaryLine = description[1].split(':scroll: `Summary:`')[1];
+        const summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
         parseSummaryLine(summaryLine, factionWork);
     });
 }
@@ -65,16 +65,20 @@ function parseSummaryLine(summaryLine, factionWork) {
     actions.forEach(actionEntry => {
         const splitEntry = actionEntry.split(':');
         let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
-        const numRegex = '/\d+\.*\d*/g';
-        const complexRegex = '/[A-z?]+/g';
+        const numRegex = /\d+\.*\d*/g;
+        const complexRegex = /[A-z?]+/g;
 
         // Check and see if the action was an easy-to-parse action
         if (arrayPosition == undefined) {
             // There will potentially be 2 quantities for each action, and always a min of 1
             const quantities = splitEntry[1].match(numRegex);
-            const actionSubtype = splitEntry[1].match(complexRegex)[0];
+            const actionSubtype = (splitEntry[1].match(complexRegex))[0];
             arrayPosition = global.actionComplex.get(actionSubtype);
-            factionWork[arrayPosition] += Number(quantities[0]);
+
+            // Check to make sure log is valid
+            if ((quantities == undefined) || (actionSubtype == undefined) || (arrayPosition == undefined)) {
+                throw new Error("Invalid log");
+            }
 
             // Only if the action has 2 quantities
             if (splitEntry[1].includes('+')) {
@@ -82,6 +86,8 @@ function parseSummaryLine(summaryLine, factionWork) {
             } else if (splitEntry[1].includes(',')) {
                 factionWork[arrayPosition + 1] += Number(quantities[1]);
             } 
+
+            factionWork[arrayPosition] += Number(quantities[0]);
         } else {
             factionWork[arrayPosition] += Number(splitEntry[1].match(numRegex)[0]);
         }
