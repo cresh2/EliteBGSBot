@@ -24,7 +24,7 @@ exports.parseBGSLog = (log) => {
             let system = global.summary.get(systemAndFaction[0]);
 
             // Create summary for a new faction if needed
-            if (!system.has(systemAndFaction[1])) {
+            if (!system.has(systemAndFaction[1].trim())) {
                 factionWork = Array(global.bgsActionAmount);
                 factionWork.fill(0);
                 system.set(systemAndFaction[1].trim(), factionWork);
@@ -36,7 +36,8 @@ exports.parseBGSLog = (log) => {
                     throw error;
                 }
             } else {
-                factionWork = system.get(systemAndFaction[1]);
+                factionWork = system.get(systemAndFaction[1].trim());
+                parseSummaryLine(summaryLine, factionWork);
             }
         } else {
             let system = new Map();

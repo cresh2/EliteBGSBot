@@ -11,9 +11,9 @@ module.exports = {
                 .setDescription("The specific system to do a summary for.")
                 .setRequired(true)),
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: true });
+        //await interaction.deferReply({ ephemeral: true });
         const targetSystem = interaction.options.getString('system');
         const systemSummary = getSystemSummary(targetSystem);
-        await interaction.editReply(systemSummary);
+        await interaction.reply({ content: `${systemSummary}`, ephemeral: true });
     },
 };

@@ -8,7 +8,7 @@ module.exports = {
     execute(message) {
         // Check if we are resetting or dealing with a log
         if (checkForReset(message)) {
-            const fullSummary = getFullSummary();
+            let fullSummary = getFullSummary();
             fullSummary.forEach(element => {
                 message.channel.send(element);
             });
@@ -19,6 +19,7 @@ module.exports = {
                 parseBGSLog(message.content);
             } catch (error) {
                 global.erroredLogs.push([message.id, error]);
+                message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
             }
         }
     },

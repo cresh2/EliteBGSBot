@@ -13,8 +13,13 @@ exports.getSystemSummary = (system) => {
 exports.getFullSummary = () => {
     if (global.summary.size == 0) {
         return ['There has not been any work done since last tick.'];
+    } else {
+        let summaries = ["***After-tick summary***\n"];
+        global.summary.forEach((systemSummary, system) => {
+            summaries.push(formatSystemSummary(system, systemSummary));
+        });
+        return summaries; 
     }
-    return true;
 }
 
 function formatSystemSummary(system, systemSummary) {
