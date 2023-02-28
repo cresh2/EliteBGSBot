@@ -1,6 +1,7 @@
 const { Events } = require('discord.js');
 let { global } = require('../global.js');
-const { getFullSummary, getSystemSummary, checkForReset, parseBGSLog } = require('../utils/parseUtils.js');
+const { checkForReset, parseBGSLog } = require('../utils/parseUtils.js');
+const { getFullSummary } = require('../utils/formatterUtils.js');
 
 module.exports = {
     name: Events.MessageCreate,

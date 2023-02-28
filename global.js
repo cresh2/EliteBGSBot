@@ -26,6 +26,30 @@ let global = {
     ]),
     bgsActionAmount : 22,
     summary : new Map(),
-    erroredLogs : []
+    erroredLogs : [],
+    actionSummaries : [
+        ' INF completed.\n',
+        ' kill(s) against this faction.\n',
+        'M bounties claimed.\n',
+        'M bonds claimed.\n',
+        'M exploration data sold.\n',
+        'M profit from trade.\n',
+        ' Thargoid interceptor(s) killed.\n',
+        ' Thargoid scout(s) killed.\n',
+        ' on-foot mission(s) failed.\n',
+        ' ship mission(s) failed.\n',
+        ' low on-foot CZ(s) done.\n',
+        ' medium on-foot CZ(s) done.\n',
+        ' high on-foot CZ(s) done.\n',
+        ' very high on-foot CZ(s) done.\n',
+        ' unknown difficulty of on-foot CZ(s) done.\n',
+        ' low ship CZ(s) done.\n',
+        ' medium ship CZ(s) done.\n',
+        ' high ship CZ(s) done.\n',
+        ' very high ship CZ(s) done.\n',
+        ' unknown difficulty of ship CZ(s) done.\n',
+        ' AX CZ(s) done.\n',
+        ' optional objectives done.\n'
+    ]
 };
 module.exports = { global };

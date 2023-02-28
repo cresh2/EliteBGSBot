@@ -9,24 +9,6 @@ exports.checkForReset = (message) => {
     return false;
 }
 
-exports.getSystemSummary = (system) => { 
-    const systemSummary = global.summary.get(system);
-    
-    if (systemSummary === undefined) {
-        return 'The system you entered does not have any logged work.';
-    } else {
-        // Needs completing
-        return true;
-    }
-}
-
-exports.getFullSummary = () => {
-    if (global.summary.size == 0) {
-        return ['There has not been any work done since last tick.'];
-    }
-    return true;
-}
-
 exports.parseBGSLog = (log) => {
     let targets = log.split('\u{1F310} `Target:`');
     targets.shift();
@@ -34,15 +16,25 @@ exports.parseBGSLog = (log) => {
     targets.forEach(target => {
         const description = target.split('\n', 2);
         const systemAndFaction = description[0].trim().split(',');
+        const summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
         let factionWork;
 
         // Check and see whether we need to create a system and/or faction entry
         if (global.summary.has(systemAndFaction[0])) {
             let system = global.summary.get(systemAndFaction[0]);
+
+            // Create summary for a new faction if needed
             if (!system.has(systemAndFaction[1])) {
                 factionWork = Array(global.bgsActionAmount);
                 factionWork.fill(0);
                 system.set(systemAndFaction[1].trim(), factionWork);
+                
+                try {
+                    parseSummaryLine(summaryLine, factionWork);
+                } catch (error) {
+                    system.delete(systemAndFaction[1].trim());
+                    throw error;
+                }
             } else {
                 factionWork = system.get(systemAndFaction[1]);
             }
@@ -52,11 +44,15 @@ exports.parseBGSLog = (log) => {
             
             factionWork.fill(0);
             system.set(systemAndFaction[1].trim(), factionWork);
-            global.summary.set(systemAndFaction[0].trim(), system)
-        }
+            global.summary.set(systemAndFaction[0].trim(), system);
 
-        const summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
-        parseSummaryLine(summaryLine, factionWork);
+            try {
+                parseSummaryLine(summaryLine, factionWork);
+            } catch (error) {
+                global.summary.delete(systemAndFaction[0].trim());
+                throw error;
+            }
+        }
     });
 }
 

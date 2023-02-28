@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { getFullSummary, getSystemSummary } = require('../utils/parseUtils.js');
+const { getSystemSummary } = require('../utils/formatterUtils.js');
 let { global } = require('../global.js');
 
 module.exports = {
