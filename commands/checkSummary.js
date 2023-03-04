@@ -8,7 +8,7 @@ module.exports = {
         .setDescription('Generates a summary of all work done in a system since last tick.')
         .addStringOption(option =>
             option.setName('system')
-                .setDescription("The specific system to do a summary for.")
+                .setDescription("The specific system to do a summary for. CASE SENSITIVE!!!!")
                 .setRequired(true)),
     async execute(interaction) {
         //await interaction.deferReply({ ephemeral: true });
