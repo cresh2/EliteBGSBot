@@ -54,5 +54,6 @@ app.listen(port, () => {
 });
 
 function preventTimeout() {
+    console.log("Preventing Shutdown")
     setTimeout(preventTimeout, 480000);
 }
