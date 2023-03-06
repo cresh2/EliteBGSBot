@@ -41,17 +41,19 @@ for (const file of eventFiles) {
 bot.login(process.env.TOKEN);
 preventTimeout();
 
-
+// Used code and ideas from: https://expressjs.com/en/starter/hello-world.html
+// And https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
 const express = require('express');
 const app = express();
 const port = 10000;
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    console.log("REceived request");
+    res.send('Hello World!');
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`);
 });
 
 function preventTimeout() {
