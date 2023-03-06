@@ -42,17 +42,17 @@ bot.login(process.env.TOKEN);
 preventTimeout();
 
 
-const express = require('express')
-const app = express()
-const port = 10000
+const express = require('express');
+const app = express();
+const port = 10000;
 
 app.get('/', (req, res) => {
-})
+});
 
 app.listen(port, () => {
   //console.log(`Example app listening on port ${port}`)
-})
+});
 
 function preventTimeout() {
-    setTimeout(preventTimeout, 480000)
+    setTimeout(preventTimeout, 480000);
 }
