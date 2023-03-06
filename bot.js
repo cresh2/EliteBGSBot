@@ -39,16 +39,16 @@ for (const file of eventFiles) {
 }
 
 bot.login(process.env.TOKEN);
-preventTimeout();
+setTimeout(preventTimeout, 480000);
 
 // Used code and ideas from: https://expressjs.com/en/starter/hello-world.html
 // And https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
 const express = require('express');
+const https = require('https');
 const app = express();
 const port = 10000;
 
 app.get('/', (req, res) => {
-    console.log("REceived request");
     res.send('Hello World!');
 });
 
@@ -58,5 +58,6 @@ app.listen(port, () => {
 
 function preventTimeout() {
     console.log("Preventing Shutdown")
+    https.get('https://elite-bgs-manager.onrender.com', (resp) => {});
     setTimeout(preventTimeout, 480000);
 }
