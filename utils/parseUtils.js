@@ -58,7 +58,7 @@ exports.parseBGSLog = (log) => {
 }
 
 function parseSummaryLine(summaryLine, factionWork) {
-    const actions = summaryLine.replace(/\d+,\d+/g).split(',');
+    const actions = summaryLine.replace(/\d+,\d+/g, '.').split(',');
     actions.forEach(actionEntry => {
         const splitEntry = actionEntry.split(':');
         let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
