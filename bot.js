@@ -2,7 +2,7 @@
 const dotenv = require('dotenv');
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Events, Collection, GatewayIntentBits } = require('discord.js');
+const { Client, Events, Collection, GatewayIntentBits, Status } = require('discord.js');
 
 dotenv.config();
 
@@ -59,5 +59,6 @@ app.listen(port, () => {
 function preventTimeout() {
     console.log("Preventing Shutdown")
     https.get('https://elite-bgs-manager.onrender.com', (resp) => {});
-    setTimeout(preventTimeout, 720000);
+    bot.ws.status === Status.Ready;
+    setTimeout(preventTimeout, 600000);
 }
