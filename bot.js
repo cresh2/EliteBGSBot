@@ -59,5 +59,5 @@ app.listen(port, () => {
 function preventTimeout() {
     console.log("Preventing Shutdown")
     https.get('https://elite-bgs-manager.onrender.com', (resp) => {});
-    setTimeout(preventTimeout, 480000);
+    setTimeout(preventTimeout, 720000);
 }
