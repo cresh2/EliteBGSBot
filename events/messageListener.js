@@ -17,8 +17,10 @@ module.exports = {
         } else if (message.content.includes('\u{1F551} `Date:`')) {
             try {
                 parseBGSLog(message.content);
+                message.react('\u{2705}');
             } catch (error) {
                 global.erroredLogs.push([message.id, error]);
+                message.react('\u{274C}');
                 message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
             }
         }
