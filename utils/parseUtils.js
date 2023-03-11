@@ -20,8 +20,8 @@ exports.parseBGSLog = (log) => {
         let factionWork;
 
         // Check and see whether we need to create a system and/or faction entry
-        if (global.summary.has(systemAndFaction[0])) {
-            let system = global.summary.get(systemAndFaction[0]);
+        if (global.summary.has(systemAndFaction[0].toUpperCase().trim())) {
+            let system = global.summary.get(systemAndFaction[0].toUpperCase().trim());
 
             // Create summary for a new faction if needed
             if (!system.has(systemAndFaction[1].trim())) {
@@ -45,12 +45,12 @@ exports.parseBGSLog = (log) => {
             
             factionWork.fill(0);
             system.set(systemAndFaction[1].trim(), factionWork);
-            global.summary.set(systemAndFaction[0].trim(), system);
+            global.summary.set(systemAndFaction[0].toUpperCase().trim(), system);
 
             try {
                 parseSummaryLine(summaryLine, factionWork);
             } catch (error) {
-                global.summary.delete(systemAndFaction[0].trim());
+                global.summary.delete(systemAndFaction[0].toUpperCase().trim());
                 throw error;
             }
         }
