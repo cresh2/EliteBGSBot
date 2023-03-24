@@ -2,7 +2,8 @@
 const dotenv = require('dotenv');
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Events, Collection, GatewayIntentBits, Status } = require('discord.js');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
+// const { Events, Status} = require('discord.js');
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ for (const file of commandFiles) {
     if ('data' in command && 'execute' in command) {
         bot.commands.set(command.data.name, command);
     } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`)
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
     }
 }
 
@@ -39,10 +40,13 @@ for (const file of eventFiles) {
 }
 
 bot.login(process.env.TOKEN);
-setTimeout(preventTimeout, 480000);
 
+// setTimeout(preventTimeout, 480000);
+
+/**
 // Used code and ideas from: https://expressjs.com/en/starter/hello-world.html
 // And https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
+// '"express":"^4.18.2","https":"^1.0.0" ,' dependency line
 const express = require('express');
 const https = require('https');
 const app = express();
@@ -61,4 +65,4 @@ function preventTimeout() {
     https.get('https://elite-bgs-manager.onrender.com', (resp) => {});
     bot.ws.status === Status.Ready;
     setTimeout(preventTimeout, 600000);
-}
+} */
