@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-// const { Events, Status} = require('discord.js');
+const { Status } = require('discord.js');
 
 dotenv.config();
 
@@ -41,9 +41,9 @@ for (const file of eventFiles) {
 
 bot.login(process.env.TOKEN);
 
-// setTimeout(preventTimeout, 480000);
+setTimeout(preventTimeout, 480000);
 
-/**
+
 // Used code and ideas from: https://expressjs.com/en/starter/hello-world.html
 // And https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
 // '"express":"^4.18.2","https":"^1.0.0" ,' dependency line
@@ -61,8 +61,8 @@ app.listen(port, () => {
 });
 
 function preventTimeout() {
-    console.log("Preventing Shutdown")
+    console.log('Preventing Shutdown');
     https.get('https://elite-bgs-manager.onrender.com', (resp) => {});
     bot.ws.status === Status.Ready;
     setTimeout(preventTimeout, 600000);
-} */
+}
