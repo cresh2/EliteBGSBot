@@ -79,7 +79,11 @@ function parseSummaryLine(summaryLine, factionWork) {
 
             // Only if the action has 2 quantities
             if (splitEntry[1].includes('+')) {
-                factionWork[global.bgsActionAmount - 1] += Number(quantities[1]);
+                if (splitEntry[1].includes('SCT')) {
+                    factionWork[arrayPosition + 1] += Number(quantities[1]);
+                } else {
+                    factionWork[global.bgsActionAmount - 1] += Number(quantities[1]);
+                }
             }
 
             factionWork[arrayPosition] += Number(quantities[0]);
