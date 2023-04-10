@@ -65,8 +65,8 @@ function parseSummaryLine(summaryLine, factionWork) {
         const numRegex = /\d+\.*,*\d*/g;
         const complexRegex = /[A-z?]+/g;
 
-        // Check and see if the action was an easy-to-parse action
-        if (arrayPosition == undefined) {
+        // Check and see if the action was an easy-to-parse action or secondary part of an action
+        if (arrayPosition == undefined && splitEntry.length != 1) {
             // There will potentially be 2 quantities for each action, and always a min of 1
             const quantities = splitEntry[1].match(numRegex);
             const actionSubtype = (splitEntry[1].match(complexRegex))[0];
@@ -80,11 +80,13 @@ function parseSummaryLine(summaryLine, factionWork) {
             // Only if the action has 2 quantities
             if (splitEntry[1].includes('+')) {
                 factionWork[global.bgsActionAmount - 1] += Number(quantities[1]);
-            } else if (splitEntry[1].includes(',')) {
-                factionWork[arrayPosition + 1] += Number(quantities[1]);
-            } 
+            }
 
             factionWork[arrayPosition] += Number(quantities[0]);
+        } else if (splitEntry.length == 1) {
+            const actionSubtype = (splitEntry[0].match(complexRegex))[0];
+            arrayPosition = global.actionComplex.get(actionSubtype);
+            factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);
         } else {
             factionWork[arrayPosition] += Number(splitEntry[1].match(numRegex)[0]);
         }
