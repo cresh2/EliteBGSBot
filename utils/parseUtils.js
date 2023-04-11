@@ -90,6 +90,11 @@ function parseSummaryLine(summaryLine, factionWork) {
         } else if (splitEntry.length == 1) {
             const actionSubtype = (splitEntry[0].match(complexRegex))[0];
             arrayPosition = global.actionComplex.get(actionSubtype);
+
+            if (arrayPosition == undefined || actionSubtype == undefined) {
+                throw new Error("Invalid log");
+            }
+
             factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);
         } else {
             factionWork[arrayPosition] += Number(splitEntry[1].match(numRegex)[0]);
