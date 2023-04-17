@@ -64,5 +64,5 @@ function preventTimeout() {
     console.log('Preventing Shutdown');
     https.get('https://elite-bgs-manager.onrender.com', (resp) => {});
     bot.ws.status === Status.Ready;
-    setTimeout(preventTimeout, 600000);
+    setTimeout(preventTimeout, 720000);
 }

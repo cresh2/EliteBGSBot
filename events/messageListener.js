@@ -23,6 +23,10 @@ module.exports = {
                 message.react('\u{274C}');
                 message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
             }
+        } else {
+            global.erroredLogs.push([message.id, "Unreadable log"]);
+            message.react('\u{274C}');
+            message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
         }
     },
 };
