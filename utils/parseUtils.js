@@ -13,6 +13,11 @@ exports.parseBGSLog = (log) => {
     let targets = log.split('\u{1F310} `Target:`');
     targets.shift();
 
+    // If there was only one entry in targets then we will have nothing to work with, so error out.
+    if (targets.length < 1) {
+        throw new Error("Invalid log");
+    }
+
     targets.forEach(target => {
         const description = target.split('\n', 2);
         const systemAndFaction = description[0].trim().split(',');

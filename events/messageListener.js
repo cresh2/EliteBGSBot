@@ -24,7 +24,7 @@ module.exports = {
                 message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
             }
         } else if (message.content.includes('Date:') || message.content.includes('Target:')) {
-            global.erroredLogs.push([message.id, "Unreadable log"]);
+            global.erroredLogs.push([message.id, "Invalid log"]);
             message.react('\u{274C}');
             message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
         }
