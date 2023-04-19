@@ -63,9 +63,16 @@ exports.parseBGSLog = (log) => {
 };
 
 function parseSummaryLine(summaryLine, factionWork) {
-    const actions = summaryLine.replace(/(\d+),(\d+)/g, '$1.$2').split(';');
-    actions.forEach(actionEntry => {
-        const splitEntry = actionEntry.split(':');
+    let actions = summaryLine.replace(/(\d+),(\d+)/g, '$1.$2').split(';');
+    for (let index = 0; index < actions.length; index++) {
+        // First need to unpack CZ actions
+        if (actions[index].includes('CZ')) {
+            let CZActions = actions[index].split(',');
+            CZActions.shift();
+            actions = actions.concat(CZActions);
+        }
+
+        const splitEntry = actions[index].split(':');
         let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
         const numRegex = /\d+\.*,*\d*/g;
         const complexRegex = /[A-z?]+/g;
@@ -102,8 +109,15 @@ function parseSummaryLine(summaryLine, factionWork) {
 
             factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);
         } else {
-            factionWork[arrayPosition] += Number(splitEntry[1].match(numRegex)[0]);
+            const quantities = splitEntry[1].match(numRegex);
+
+            // If S&R or sold items, need to update profit
+            if (arrayPosition == 21 || arrayPosition == 25) {
+                factionWork[arrayPosition + 1] += Number(quantities[1]);
+            }
+
+            factionWork[arrayPosition] += Number(quantities[0]);
         }
-    });
+    }
 }
 
