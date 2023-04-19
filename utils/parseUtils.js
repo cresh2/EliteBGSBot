@@ -7,7 +7,7 @@ exports.checkForReset = (message) => {
     }
 
     return false;
-}
+};
 
 exports.parseBGSLog = (log) => {
     let targets = log.split('\u{1F310} `Target:`');
@@ -15,7 +15,7 @@ exports.parseBGSLog = (log) => {
 
     // If there was only one entry in targets then we will have nothing to work with, so error out.
     if (targets.length < 1) {
-        throw new Error("Invalid log");
+        throw new Error('Invalid log');
     }
 
     targets.forEach(target => {
@@ -33,7 +33,7 @@ exports.parseBGSLog = (log) => {
                 factionWork = Array(global.bgsActionAmount);
                 factionWork.fill(0);
                 system.set(systemAndFaction[1].trim(), factionWork);
-                
+
                 try {
                     parseSummaryLine(summaryLine, factionWork);
                 } catch (error) {
@@ -47,7 +47,7 @@ exports.parseBGSLog = (log) => {
         } else {
             let system = new Map();
             factionWork = Array(global.bgsActionAmount);
-            
+
             factionWork.fill(0);
             system.set(systemAndFaction[1].trim(), factionWork);
             global.summary.set(systemAndFaction[0].toUpperCase().trim(), system);
@@ -60,10 +60,10 @@ exports.parseBGSLog = (log) => {
             }
         }
     });
-}
+};
 
 function parseSummaryLine(summaryLine, factionWork) {
-    const actions = summaryLine.replace(/(\d+),(\d+)/g, '$1.$2').split(',');
+    const actions = summaryLine.replace(/(\d+),(\d+)/g, '$1.$2').split(';');
     actions.forEach(actionEntry => {
         const splitEntry = actionEntry.split(':');
         let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
@@ -79,15 +79,15 @@ function parseSummaryLine(summaryLine, factionWork) {
 
             // Check to make sure log is valid
             if ((quantities == undefined) || (actionSubtype == undefined) || (arrayPosition == undefined)) {
-                throw new Error("Invalid log");
+                throw new Error('Invalid log');
             }
 
             // Only if the action has 2 quantities
-            if (splitEntry[1].includes('+')) {
-                if (splitEntry[1].includes('SCT')) {
-                    factionWork[arrayPosition + 1] += Number(quantities[1]);
-                } else {
+            if (splitEntry[1].includes('+') || splitEntry[1].includes(',')) {
+                if (splitEntry[1].includes('OPTS')) {
                     factionWork[global.bgsActionAmount - 1] += Number(quantities[1]);
+                } else {
+                    factionWork[arrayPosition + 1] += Number(quantities[1]);
                 }
             }
 
@@ -97,7 +97,7 @@ function parseSummaryLine(summaryLine, factionWork) {
             arrayPosition = global.actionComplex.get(actionSubtype);
 
             if (arrayPosition == undefined || actionSubtype == undefined) {
-                throw new Error("Invalid log");
+                throw new Error('Invalid log');
             }
 
             factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);

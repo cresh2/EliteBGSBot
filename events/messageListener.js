@@ -21,12 +21,12 @@ module.exports = {
             } catch (error) {
                 global.erroredLogs.push([message.id, error]);
                 message.react('\u{274C}');
-                message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
+                message.channel.send('Failed to parse log, make sure you are using the most up-to-date version of Hekateh\'s BGS tool.');
             }
         } else if (message.content.includes('Date:') || message.content.includes('Target:')) {
-            global.erroredLogs.push([message.id, "Invalid log"]);
+            global.erroredLogs.push([message.id, 'Invalid log']);
             message.react('\u{274C}');
-            message.channel.send("Failed to parse log, make sure you are using the most up-to-date version of Hekateh's BGS tool.");
+            message.channel.send('Failed to parse log, make sure you are using the most up-to-date version of Hekateh\'s BGS tool.');
         }
     },
 };
