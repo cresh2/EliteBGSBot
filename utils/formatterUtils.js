@@ -33,7 +33,7 @@ function formatSystemSummary(system, systemSummary) {
                 summary += factionWork[index] + global.actionSummaries[index];
 
                 // We want to be sure to include that the profit was unknown
-                if ((index == 21 || index == 25) && factionWork[index + 1] == 0) {
+                if ((index == 21 || index == 25) && (factionWork[index + 1] == 0)) {
                     summary += 'unknown profit.\n';
                 }
             }

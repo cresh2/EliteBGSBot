@@ -65,58 +65,57 @@ exports.parseBGSLog = (log) => {
 function parseSummaryLine(summaryLine, factionWork) {
     let actions = summaryLine.replace(/(\d+),(\d+)/g, '$1.$2').split(';');
     for (let index = 0; index < actions.length; index++) {
-        // First need to unpack CZ actions
-        if (actions[index].includes('CZ')) {
+        // First need to unpack CZ actions, otherwise we can parse as normal
+        if (actions[index].includes('CZ') && actions[index].includes(',')) {
             let CZActions = actions[index].split(',');
-            CZActions.shift();
             actions = actions.concat(CZActions);
-        }
+        } else {
+            const splitEntry = actions[index].split(':');
+            let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
+            const numRegex = /\d+\.*,*\d*/g;
+            const complexRegex = /[A-z?]+/g;
 
-        const splitEntry = actions[index].split(':');
-        let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
-        const numRegex = /\d+\.*,*\d*/g;
-        const complexRegex = /[A-z?]+/g;
+            // Check and see if the action was an easy-to-parse action or secondary part of an action
+            if (arrayPosition == undefined && splitEntry.length != 1) {
+                // There will potentially be 2 quantities for each action, and always a min of 1
+                const quantities = splitEntry[1].match(numRegex);
+                const actionSubtype = (splitEntry[1].match(complexRegex))[0];
+                arrayPosition = global.actionComplex.get(actionSubtype);
 
-        // Check and see if the action was an easy-to-parse action or secondary part of an action
-        if (arrayPosition == undefined && splitEntry.length != 1) {
-            // There will potentially be 2 quantities for each action, and always a min of 1
-            const quantities = splitEntry[1].match(numRegex);
-            const actionSubtype = (splitEntry[1].match(complexRegex))[0];
-            arrayPosition = global.actionComplex.get(actionSubtype);
+                // Check to make sure log is valid
+                if ((quantities == undefined) || (actionSubtype == undefined) || (arrayPosition == undefined)) {
+                    throw new Error('Invalid log');
+                }
 
-            // Check to make sure log is valid
-            if ((quantities == undefined) || (actionSubtype == undefined) || (arrayPosition == undefined)) {
-                throw new Error('Invalid log');
-            }
+                // Only if the action has 2 quantities
+                if (splitEntry[1].includes('+') || splitEntry[1].includes(',')) {
+                    if (splitEntry[1].includes('OPTS')) {
+                        factionWork[global.bgsActionAmount - 1] += Number(quantities[1]);
+                    } else {
+                        factionWork[arrayPosition + 1] += Number(quantities[1]);
+                    }
+                }
 
-            // Only if the action has 2 quantities
-            if (splitEntry[1].includes('+') || splitEntry[1].includes(',')) {
-                if (splitEntry[1].includes('OPTS')) {
-                    factionWork[global.bgsActionAmount - 1] += Number(quantities[1]);
-                } else {
+                factionWork[arrayPosition] += Number(quantities[0]);
+            } else if (splitEntry.length == 1) {
+                const actionSubtype = (splitEntry[0].match(complexRegex))[0];
+                arrayPosition = global.actionComplex.get(actionSubtype);
+
+                if (arrayPosition == undefined || actionSubtype == undefined) {
+                    throw new Error('Invalid log');
+                }
+
+                factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);
+            } else {
+                const quantities = splitEntry[1].match(numRegex);
+
+                // If S&R or sold items, need to update profit
+                if (arrayPosition == 21 || arrayPosition == 25) {
                     factionWork[arrayPosition + 1] += Number(quantities[1]);
                 }
+
+                factionWork[arrayPosition] += Number(quantities[0]);
             }
-
-            factionWork[arrayPosition] += Number(quantities[0]);
-        } else if (splitEntry.length == 1) {
-            const actionSubtype = (splitEntry[0].match(complexRegex))[0];
-            arrayPosition = global.actionComplex.get(actionSubtype);
-
-            if (arrayPosition == undefined || actionSubtype == undefined) {
-                throw new Error('Invalid log');
-            }
-
-            factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);
-        } else {
-            const quantities = splitEntry[1].match(numRegex);
-
-            // If S&R or sold items, need to update profit
-            if (arrayPosition == 21 || arrayPosition == 25) {
-                factionWork[arrayPosition + 1] += Number(quantities[1]);
-            }
-
-            factionWork[arrayPosition] += Number(quantities[0]);
         }
     }
 }
