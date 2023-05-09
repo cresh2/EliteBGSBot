@@ -72,7 +72,7 @@ function parseSummaryLine(summaryLine, factionWork) {
         } else {
             const splitEntry = actions[index].split(':');
             let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
-            const numRegex = /\d+\.*,*\d*/g;
+            const numRegex = /\d+\.*\d*/g;
             const complexRegex = /[A-z?]+/g;
 
             // Check and see if the action was an easy-to-parse action or secondary part of an action
@@ -110,7 +110,7 @@ function parseSummaryLine(summaryLine, factionWork) {
                 const quantities = splitEntry[1].match(numRegex);
 
                 // If S&R or sold items, need to update profit
-                if (arrayPosition == 21 || arrayPosition == 25) {
+                if ((arrayPosition == 21 || arrayPosition == 25) && (quantities.length > 1)) {
                     factionWork[arrayPosition + 1] += Number(quantities[1]);
                 }
 

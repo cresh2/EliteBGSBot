@@ -57,7 +57,7 @@ let global = {
         'M profit.\n',
         't of cargo bought.\n',
         'M organic data sold.\n',
-        'pods of Search and Rescue handed in with ',
+        ' pods of Search and Rescue handed in with ',
         'M profit.\n',
         ' optional objectives done.\n',
     ],
