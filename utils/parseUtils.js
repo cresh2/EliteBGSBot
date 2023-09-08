@@ -72,7 +72,7 @@ function parseSummaryLine(summaryLine, factionWork) {
         } else {
             const splitEntry = actions[index].split(':');
             let arrayPosition = global.actionSimple.get(splitEntry[0].trim());
-            const numRegex = /\d+\.*\d*/g;
+            const numRegex = /(\s*|-)\d+\.*\d*/g;
             const complexRegex = /[A-z?]+/g;
 
             // Check and see if the action was an easy-to-parse action or secondary part of an action
