@@ -29,7 +29,7 @@ function formatSystemSummary(system, systemSummary) {
     systemSummary.forEach((factionWork, faction) => {
         summary += `${faction}:\n\`\`\`\n`;
         for (let index = 0; index < global.bgsActionAmount; index++) {
-            if (factionWork[index] > 0) {
+            if (factionWork[index] > 0 || (index == 0 && factionWork[index] < 0)) {
                 summary += factionWork[index] + global.actionSummaries[index];
 
                 // We want to be sure to include that the profit was unknown
