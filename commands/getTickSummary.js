@@ -27,7 +27,7 @@ module.exports = {
         } else {
             await interaction.reply({ content: 'The summary will not be automatically posted at this time each day.', ephemeral: true });
         }
-        sendFullSummary(repeat, channel);
+        sendFullSummary(channel);
     },
 };
 
