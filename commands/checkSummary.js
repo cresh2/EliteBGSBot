@@ -8,10 +8,10 @@ module.exports = {
         .setDescription('Generates a summary of all work done in a system since last tick.')
         .addStringOption(option =>
             option.setName('system')
-                .setDescription("The specific system to do a summary for. Case Insensitive.")
+                .setDescription('The specific system to do a summary for. Case Insensitive.')
                 .setRequired(true)),
     async execute(interaction) {
-        //await interaction.deferReply({ ephemeral: true });
+        // await interaction.deferReply({ ephemeral: true });
         const targetSystem = interaction.options.getString('system');
         const systemSummary = getSystemSummary(targetSystem.toUpperCase().trim());
         await interaction.reply({ content: `${systemSummary}`, ephemeral: true });
