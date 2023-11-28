@@ -38,10 +38,9 @@ function sendFullSummary(channel) {
     });
     global.summary.clear();
     global.erroredLogs = [];
+    clearTimeout(timeoutId);
     if (repeat) {
         timeoutId = setTimeout(sendFullSummary, 86400000, channel);
-    } else if (timeoutId != -1) {
-        clearTimeout(timeoutId);
     }
 }
 
