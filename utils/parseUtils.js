@@ -52,11 +52,10 @@ exports.parseBGSLog = (log, logType) => {
                 systemAndFaction = [systemAndFactionString.split('**')[1], systemAndFactionString.split('**')[3]];
                 summaryLine = description[0].split('**:')[1].trim();
 
-                console.log(summaryLine[summaryLine.length - 1] === ';');
+                // Must remove trailing semicolon to parse correctly
                 if (summaryLine[summaryLine.length - 1] === ';') {
                     summaryLine = summaryLine.substr(0, summaryLine.length - 2);
                 }
-                console.log(summaryLine[summaryLine.length - 1] === ';');
                 break;
         }
         let factionWork;
