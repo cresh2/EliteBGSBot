@@ -9,8 +9,20 @@ exports.checkForReset = (message) => {
     return false;
 };
 
-exports.parseBGSLog = (log) => {
-    let targets = log.split('\u{1F310} `Target:`');
+exports.parseBGSLog = (log, logType) => {
+    let targets;
+    // Each log has different ways to get the targets list
+    switch (logType) {
+        case 0:
+            targets = log.split('\u{1F310} `Target:`');
+            break;
+        case 1:
+            targets = log.split('**Target:**');
+            break;
+        case 2:
+            targets = log.split('\n');
+            break;
+    }
     targets.shift();
 
     // If there was only one entry in targets then we will have nothing to work with, so error out.
@@ -20,8 +32,33 @@ exports.parseBGSLog = (log) => {
 
     targets.forEach(target => {
         const description = target.split('\n', 2);
-        const systemAndFaction = description[0].trim().split(',');
-        const summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
+
+        let systemAndFaction;
+        let summaryLine;
+        let systemAndFactionString;
+
+        // parsing the system and faction is unique for each log type
+        switch (logType) {
+            case 0:
+                systemAndFaction = description[0].trim().split(',');
+                summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
+                break;
+            case 1:
+                systemAndFaction = description[0].trim().split(',');
+                summaryLine = description[1].split('**Summary:**')[1];
+                break;
+            case 2:
+                systemAndFactionString = description[0].trim().split(':')[0];
+                systemAndFaction = [systemAndFactionString.split('**')[1], systemAndFactionString.split('**')[3]];
+                summaryLine = description[0].split('**:')[1].trim();
+
+                console.log(summaryLine[summaryLine.length - 1] === ';');
+                if (summaryLine[summaryLine.length - 1] === ';') {
+                    summaryLine = summaryLine.substr(0, summaryLine.length - 2);
+                }
+                console.log(summaryLine[summaryLine.length - 1] === ';');
+                break;
+        }
         let factionWork;
 
         // Check and see whether we need to create a system and/or faction entry

@@ -14,9 +14,18 @@ module.exports = {
             });
             global.summary.clear();
             global.erroredLogs = [];
-        } else if (message.content.includes('\u{1F551} `Date:`')) {
+        } else if (message.content.includes('Bot-Header') && message.content.includes('EliteBGS')) {
             try {
-                parseBGSLog(message.content);
+                // Determine log type if any
+                if (message.content.includes('NovaNavy')) {
+                    parseBGSLog(message.content, 0);
+                } else if (message.content.includes('Generic')) {
+                    parseBGSLog(message.content, 1);
+                } else if (message.content.includes('OneLine')) {
+                    parseBGSLog(message.content, 2);
+                } else {
+                    throw new Error('Invalid log type');
+                }
                 message.react('\u{2705}');
             } catch (error) {
                 global.erroredLogs.push([message.id, error]);
