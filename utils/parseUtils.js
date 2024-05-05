@@ -54,7 +54,7 @@ exports.parseBGSLog = (log, logType) => {
 
                 // Must remove trailing semicolon to parse correctly
                 if (summaryLine[summaryLine.length - 1] === ';') {
-                    summaryLine = summaryLine.substr(0, summaryLine.length - 2);
+                    summaryLine = summaryLine.substr(0, summaryLine.length - 1);
                 }
                 break;
         }
