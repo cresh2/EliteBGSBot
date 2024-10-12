@@ -41,8 +41,9 @@ for (const file of eventFiles) {
 
 bot.login(process.env.TOKEN);
 
-setTimeout(preventTimeout, 480000);
+/** Legacy code to keep the bot running on Render
 
+setTimeout(preventTimeout, 480000);
 
 // Used code and ideas from: https://expressjs.com/en/starter/hello-world.html
 // And https://www.twilio.com/blog/2017/08/http-requests-in-node-js.html
@@ -66,3 +67,4 @@ function preventTimeout() {
     bot.ws.status === Status.Ready;
     setTimeout(preventTimeout, 540000);
 }
+*/
