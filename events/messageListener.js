@@ -2,6 +2,7 @@ const { Events } = require('discord.js');
 let { global } = require('../global.js');
 const { checkForReset, parseBGSLog } = require('../utils/parseUtils.js');
 const { getFullSummary } = require('../utils/formatterUtils.js');
+const { saveBackupToFile, loadBackupFromFile } = require('../utils/backupUtils.js');
 
 module.exports = {
     name: Events.MessageCreate,
@@ -27,15 +28,19 @@ module.exports = {
                     throw new Error('Invalid log type');
                 }
                 message.react('\u{2705}');
+                saveBackupToFile();
             } catch (error) {
+                // Handle error and reset to inital state
                 global.erroredLogs.push([message.id, error]);
                 message.react('\u{274C}');
-                message.channel.send('Failed to parse log, make sure you are using the most up-to-date version of Hekateh\'s BGS tool.');
+                message.channel.send('Failed to parse log, make sure you are using the most up-to-date version of Hekateh\'s BGS tool. Specific issue: ' + error);
+                loadBackupFromFile();
             }
         } else if (message.content.includes('Date:') || message.content.includes('Target:')) {
+            // Most likely an old version of the tool
             global.erroredLogs.push([message.id, 'Invalid log']);
             message.react('\u{274C}');
-            message.channel.send('Failed to parse log, make sure you are using the most up-to-date version of Hekateh\'s BGS tool.');
+            message.channel.send('Failed to parse log, make sure you are using the most up-to-date version of Hekateh\'s BGS tool. Specific issue: Outdated log format');
         }
     },
 };

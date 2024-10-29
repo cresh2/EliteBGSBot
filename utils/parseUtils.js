@@ -27,7 +27,7 @@ exports.parseBGSLog = (log, logType) => {
 
     // If there was only one entry in targets then we will have nothing to work with, so error out.
     if (targets.length < 1) {
-        throw new Error('Invalid log');
+        throw new Error('No target');
     }
 
     targets.forEach(target => {
@@ -120,7 +120,7 @@ function parseSummaryLine(summaryLine, factionWork) {
 
                 // Check to make sure log is valid
                 if ((quantities == undefined) || (actionSubtype == undefined) || (arrayPosition == undefined)) {
-                    throw new Error('Invalid log');
+                    throw new Error('Invalid Summary Line Item');
                 }
 
                 // Only if the action has 2 quantities
@@ -138,7 +138,7 @@ function parseSummaryLine(summaryLine, factionWork) {
                 arrayPosition = global.actionComplex.get(actionSubtype);
 
                 if (arrayPosition == undefined || actionSubtype == undefined) {
-                    throw new Error('Invalid log');
+                    throw new Error('Invalid Summary Line Item');
                 }
 
                 factionWork[arrayPosition] += Number(splitEntry[0].match(numRegex)[0]);

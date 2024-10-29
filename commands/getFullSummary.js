@@ -7,6 +7,13 @@ module.exports = {
         .setDescription('Generates a summary of all work done since last tick.'),
     async execute(interaction) {
         const summary = getFullSummary();
+
+        // If there is no summary return early
+        if (summary.length <= 1) {
+            await interaction.reply({ content: `${summary[0]}`, ephemeral: true });
+            return;
+        } 
+        
         summary.shift();
 
         // Construct full summary string
