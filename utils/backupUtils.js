@@ -10,7 +10,7 @@ exports.saveBackupToFile = () => {
     for (let [system, systemWork] of global.summary) {
         backup += `${system}:`;
         for (let [faction, factionWork] of systemWork) {
-            backup += `${faction}=${factionWork.join('+')}`+'-';
+            backup += `${faction}=${factionWork.join('+')}`+'!';
         }
         backup = backup.slice(0,-1) + ';';
     }
@@ -48,7 +48,7 @@ exports.loadBackupFromFile = () => {
             let systemWorkMap = new Map();
 
             // Unwraps the faction and work done and saves everything
-            systemWork.split('-').forEach(factionSummaryLine => {
+            systemWork.split('!').forEach(factionSummaryLine => {
                 const faction = factionSummaryLine.split('=')[0];
                 const factionWork = factionSummaryLine.split('=')[1];
                 systemWorkMap.set(faction, factionWork.split('+'));
