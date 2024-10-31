@@ -74,11 +74,16 @@ exports.parseBGSLog = (log, logType) => {
                     parseSummaryLine(summaryLine, factionWork);
                 } catch (error) {
                     system.delete(systemAndFaction[1].trim());
-                    throw error;
+                    throw new Error('Invalid summary line');
                 }
             } else {
                 factionWork = system.get(systemAndFaction[1].trim());
-                parseSummaryLine(summaryLine, factionWork);
+
+                try {
+                    parseSummaryLine(summaryLine, factionWork);
+                } catch (error) {
+                    throw new Error('Invalid summary line');
+                }
             }
         } else {
             let system = new Map();
@@ -92,7 +97,7 @@ exports.parseBGSLog = (log, logType) => {
                 parseSummaryLine(summaryLine, factionWork);
             } catch (error) {
                 global.summary.delete(systemAndFaction[0].toUpperCase().trim());
-                throw error;
+                throw new Error('Invalid summary line');
             }
         }
     });
