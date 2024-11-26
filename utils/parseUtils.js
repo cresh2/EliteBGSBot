@@ -38,26 +38,30 @@ exports.parseBGSLog = (log, logType) => {
         let systemAndFactionString;
 
         // parsing the system and faction is unique for each log type
-        switch (logType) {
-            case 0:
-                systemAndFaction = description[0].trim().split(',');
-                summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
-                break;
-            case 1:
-                systemAndFaction = description[0].trim().split(',');
-                summaryLine = description[1].split('**Summary:**')[1];
-                break;
-            case 2:
-                systemAndFactionString = description[0].trim().split(':')[0];
-                systemAndFaction = [systemAndFactionString.split('**')[1], systemAndFactionString.split('**')[3]];
-                summaryLine = description[0].split('**:')[1].trim();
+        try {
+            switch (logType) {
+                case 0:
+                    systemAndFaction = description[0].trim().split(',');
+                    summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
+                    break;
+                case 1:
+                    systemAndFaction = description[0].trim().split(',');
+                    summaryLine = description[1].split('**Summary:**')[1];
+                    break;
+                case 2:
+                    systemAndFactionString = description[0].trim().split(':')[0];
+                    systemAndFaction = [systemAndFactionString.split('**')[1], systemAndFactionString.split('**')[3]];
+                    summaryLine = description[0].split('**:')[1].trim();
 
-                // Must remove trailing semicolon to parse correctly
-                if (summaryLine[summaryLine.length - 1] === ';') {
-                    summaryLine = summaryLine.substr(0, summaryLine.length - 1);
-                }
-                break;
-        }
+                    // Must remove trailing semicolon to parse correctly
+                    if (summaryLine[summaryLine.length - 1] === ';') {
+                        summaryLine = summaryLine.substr(0, summaryLine.length - 1);
+                    }
+                    break;
+            }
+        } catch (error) {
+            throw new Error('Invalid target or summary line format');
+        }  
         let factionWork;
 
         // Check and see whether we need to create a system and/or faction entry
