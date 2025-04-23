@@ -51,7 +51,14 @@ exports.loadBackupFromFile = () => {
             systemWork.split('!').forEach(factionSummaryLine => {
                 const faction = factionSummaryLine.split('=')[0];
                 const factionWork = factionSummaryLine.split('=')[1];
-                systemWorkMap.set(faction, factionWork.split('+'));
+                let factionWorkNumbers = factionWork.split('+');
+
+                // Turns entires into numbers from strings
+                for (let index = 0; index < factionWorkNumbers.length; index++) {
+                    factionWorkNumbers[index] = +factionWorkNumbers[index];
+                }
+
+                systemWorkMap.set(faction, factionWorkNumbers);
             });
 
             global.summary.set(system, systemWorkMap);
