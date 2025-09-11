@@ -15,6 +15,7 @@ module.exports = {
             });
             global.summary.clear();
             global.erroredLogs = [];
+            saveBackupToFile();
         } else if (message.content.includes('Bot-Header') && message.content.includes('EliteBGS')) {
             try {
                 // Determine log type if any
