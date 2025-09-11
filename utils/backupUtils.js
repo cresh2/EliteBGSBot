@@ -34,6 +34,10 @@ exports.loadBackupFromFile = () => {
     }
 
     const backup = backupFile.split(',');
+    if (backup.length == 1) {
+        return;
+    }
+
     const time = backup[0]*1.0;
 
     // We only want to use the back up if it is less than 24 hours old
