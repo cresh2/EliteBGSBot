@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { getFullSummary } = require('../utils/formatterUtils.js');
 let { global } = require('../global.js');
 const { clearTimeout } = require('timers');
+const { saveBackupToFile } = require('../utils/backupUtils.js');
 
 let repeat = false;
 let timeoutId = -1;
@@ -28,6 +29,7 @@ module.exports = {
             await interaction.reply({ content: 'The summary will not be automatically posted at this time each day.', ephemeral: true });
         }
         sendFullSummary(channel);
+        saveBackupToFile();
     },
 };
 
