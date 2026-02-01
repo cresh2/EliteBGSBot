@@ -14,7 +14,7 @@ exports.parseBGSLog = (log, logType) => {
     // Each log has different ways to get the targets list
     switch (logType) {
         case 0:
-            targets = log.split('\u{1F310} `Target:`');
+            targets = log.split('\u{1F310} \u{2068}`Target:`\u{2069}');
             break;
         case 1:
             targets = log.split('**Target:**');
@@ -42,7 +42,7 @@ exports.parseBGSLog = (log, logType) => {
             switch (logType) {
                 case 0:
                     systemAndFaction = description[0].trim().split(',');
-                    summaryLine = description[1].split('\u{1F4DC} `Summary:`')[1];
+                    summaryLine = description[1].split('\u{1F4DC} \u{2068}`Summary:`\u{2069}')[1];
                     break;
                 case 1:
                     systemAndFaction = description[0].trim().split(',');

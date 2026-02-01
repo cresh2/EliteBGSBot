@@ -22,7 +22,7 @@ module.exports = {
                 if (message.content.includes('NovaNavy')) {
                     parseBGSLog(message.content, 0);
                 } else if (message.content.includes('Generic')) {
-                    parseBGSLog(message.content, 1);
+                    parseBGSLog(message.content, 1); 
                 } else if (message.content.includes('OneLine')) {
                     parseBGSLog(message.content, 2);
                 } else {
